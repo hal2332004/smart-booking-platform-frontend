@@ -12,6 +12,7 @@ import { HeroSlideshow } from '@/components/HeroSlideshow';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Card';
+import { SEO } from '@/components/SEO';
 
 export function HomePage() {
   const { t } = useI18n();
@@ -54,9 +55,9 @@ export function HomePage() {
   ];
 
   const testimonials = [
-    { name: 'Linh N.', city: 'Ho Chi Minh City', text: 'I found my apartment in three days. The listings were accurate and the landlord replied within an hour.' },
-    { name: 'Marcus W.', city: 'Hanoi', text: 'Clean, fast, and no surprises. The booking viewing flow is the best I have used in Vietnam.' },
-    { name: 'Quang T.', city: 'Da Nang', text: 'I trusted the verified badge — and it was right. Everything matched the photos and description.' },
+    { name: t('home.t1.name'), city: t('home.t1.city'), text: t('home.t1.text') },
+    { name: t('home.t2.name'), city: t('home.t2.city'), text: t('home.t2.text') },
+    { name: t('home.t3.name'), city: t('home.t3.city'), text: t('home.t3.text') },
   ];
 
   return (

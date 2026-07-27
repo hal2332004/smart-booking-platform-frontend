@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Save, AlertCircle, Check, Film, Image as ImageIcon, X } from 'lucide-react';
+import { ArrowLeft, Save, AlertCircle, Check, X } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 import {
   fetchApartmentById, createApartment, updateApartment, makeSlug,
 } from '@/lib/apartmentService';
 import { supabase } from '@/lib/supabase';
 import { getCities, getDistricts } from '@/lib/locationService';
-import { getAmenities } from '@/lib/amenityService';
 import {
-  type ApartmentMedia, type City, type District, type Amenity,
+  type ApartmentMedia, type City, type District,
 } from '@/lib/types';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -18,6 +17,7 @@ import { Field, Input, Textarea, Select } from '@/components/ui/Field';
 interface ApartmentFormInput {
   code: string;
   title_vi: string;
+  title_en: string;
   slug: string;
   apartment_type: string;
   rent_price: string;
@@ -28,14 +28,11 @@ interface ApartmentFormInput {
   city_id: string;
   district_id: string;
   address: string;
-  latitude: string;
-  longitude: string;
-  contact_phone: string;
-  contact_zalo: string;
   bedrooms: number;
   bathrooms: number;
   area: string;
   description_vi: string;
+  description_en: string;
   published: boolean;
   featured: boolean;
 }
@@ -43,6 +40,7 @@ interface ApartmentFormInput {
 const emptyForm: ApartmentFormInput = {
   code: '',
   title_vi: '',
+  title_en: '',
   slug: '',
   apartment_type: 'serviced',
   rent_price: '',
@@ -53,14 +51,11 @@ const emptyForm: ApartmentFormInput = {
   city_id: '',
   district_id: '',
   address: '',
-  latitude: '',
-  longitude: '',
-  contact_phone: '',
-  contact_zalo: '',
   bedrooms: 1,
   bathrooms: 1,
   area: '',
   description_vi: '',
+  description_en: '',
   published: false,
   featured: false,
 };
@@ -76,14 +71,13 @@ export function AdminApartmentFormPage() {
   const [form, setForm] = useState<ApartmentFormInput>(emptyForm);
   const [existingMedia, setExistingMedia] = useState<ApartmentMedia[]>([]);
   const [newFiles, setNewFiles] = useState<Array<{ file: File; preview: string; type: 'image' | 'video'; isCover: boolean }>>([]);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [cities, setCities] = useState<City[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
-  const [allAmenities, setAllAmenities] = useState<Amenity[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [slugTouched, setSlugTouched] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   // ---------- Media handling helpers ----------
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +100,6 @@ export function AdminApartmentFormPage() {
     if (!window.confirm('Bạn có chắc chắn muốn xóa file này?')) return;
     try {
       setSaving(true);
-      // Delete from storage bucket
       let path = storagePath;
       if (storagePath.includes('/storage/v1/object/public/apartments/')) {
         path = storagePath.split('/storage/v1/object/public/apartments/')[1];
@@ -115,7 +108,6 @@ export function AdminApartmentFormPage() {
       if (storageErr) {
         console.warn('Storage deletion warning:', storageErr);
       }
-      // Delete DB row
       const { error: dbErr } = await supabase.from('apartment_media').delete().eq('id', mediaId);
       if (dbErr) throw dbErr;
       setExistingMedia((prev) => prev.filter((m) => m.id !== mediaId));
@@ -132,14 +124,12 @@ export function AdminApartmentFormPage() {
     if (!id) return;
     try {
       setSaving(true);
-      // Clear cover flags for this apartment
       const { error: clearErr } = await supabase
         .from('apartment_media')
         .update({ is_cover: false })
         .eq('apartment_id', id);
       if (clearErr) throw clearErr;
 
-      // Set new cover flag
       const { error: setErr } = await supabase
         .from('apartment_media')
         .update({ is_cover: true })
@@ -161,9 +151,8 @@ export function AdminApartmentFormPage() {
     const loadData = async () => {
       try {
         setLoading(true);
-        const [citiesData, amenitiesData] = await Promise.all([getCities(), getAmenities()]);
+        const citiesData = await getCities();
         setCities(citiesData || []);
-        setAllAmenities(amenitiesData || []);
 
         if (id) {
           const a = await fetchApartmentById(id);
@@ -174,6 +163,7 @@ export function AdminApartmentFormPage() {
           setForm({
             code: a.code || '',
             title_vi: a.title_vi || '',
+            title_en: a.title_en || '',
             slug: a.slug || '',
             apartment_type: a.apartment_type || 'serviced',
             rent_price: a.rent_price !== null && a.rent_price !== undefined ? String(a.rent_price) : '',
@@ -184,14 +174,11 @@ export function AdminApartmentFormPage() {
             city_id: a.city_id !== null && a.city_id !== undefined ? String(a.city_id) : '',
             district_id: a.district_id !== null && a.district_id !== undefined ? String(a.district_id) : '',
             address: a.address || '',
-            latitude: a.latitude !== null && a.latitude !== undefined ? String(a.latitude) : '',
-            longitude: a.longitude !== null && a.longitude !== undefined ? String(a.longitude) : '',
-            contact_phone: a.contact_phone || '',
-            contact_zalo: a.contact_zalo || '',
             bedrooms: a.bedrooms || 1,
             bathrooms: a.bathrooms || 1,
             area: a.area !== null && a.area !== undefined ? String(a.area) : '',
             description_vi: a.description_vi || '',
+            description_en: a.description_en || '',
             published: a.published || false,
             featured: a.featured || false,
           });
@@ -202,7 +189,6 @@ export function AdminApartmentFormPage() {
           }
 
           setExistingMedia(a.apartment_media || []);
-          setSelectedAmenities(a.apartment_amenities?.map((am: any) => String(am.amenity_id)) || []);
         } else {
           setForm({
             ...emptyForm,
@@ -218,8 +204,6 @@ export function AdminApartmentFormPage() {
     };
     loadData();
   }, [id]);
-
-  const [notFound, setNotFound] = useState(false);
 
   const update = (patch: Partial<ApartmentFormInput>) => setForm((f) => ({ ...f, ...patch }));
 
@@ -247,14 +231,6 @@ export function AdminApartmentFormPage() {
     }
   };
 
-  const toggleAmenity = (amenityId: string) => {
-    setSelectedAmenities((prev) =>
-      prev.includes(amenityId)
-        ? prev.filter((x) => x !== amenityId)
-        : [...prev, amenityId]
-    );
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.address) {
@@ -267,6 +243,7 @@ export function AdminApartmentFormPage() {
     const payload = {
       code: form.code,
       title_vi: form.title_vi,
+      title_en: form.title_en || null,
       slug: form.slug || makeSlug(form.title_vi),
       apartment_type: form.apartment_type,
       rent_price: parseFloat(form.rent_price) || 0,
@@ -277,14 +254,11 @@ export function AdminApartmentFormPage() {
       city_id: form.city_id ? parseInt(form.city_id) : null,
       district_id: form.district_id ? parseInt(form.district_id) : null,
       address: form.address,
-      latitude: form.latitude ? parseFloat(form.latitude) : null,
-      longitude: form.longitude ? parseFloat(form.longitude) : null,
-      contact_phone: form.contact_phone || null,
-      contact_zalo: form.contact_zalo || null,
       bedrooms: parseInt(String(form.bedrooms)) || 1,
       bathrooms: parseInt(String(form.bathrooms)) || 1,
       area: form.area ? parseFloat(form.area) : null,
       description_vi: form.description_vi || '',
+      description_en: form.description_en || null,
       published: form.published,
       featured: form.featured,
     };
@@ -299,22 +273,6 @@ export function AdminApartmentFormPage() {
       }
 
       if (apartmentId) {
-        // Sync amenities
-        const { error: delAmenError } = await supabase
-          .from('apartment_amenities')
-          .delete()
-          .eq('apartment_id', apartmentId);
-        if (delAmenError) throw delAmenError;
-
-        if (selectedAmenities.length > 0) {
-          const rows = selectedAmenities.map((aid) => ({
-            apartment_id: apartmentId,
-            amenity_id: parseInt(aid),
-          }));
-          const { error: insAmenError } = await supabase.from('apartment_amenities').insert(rows);
-          if (insAmenError) throw insAmenError;
-        }
-
         // Upload new files
         if (newFiles.length > 0) {
           const startSortOrder = existingMedia.length;
@@ -378,9 +336,9 @@ export function AdminApartmentFormPage() {
         <Card className="h-64 animate-pulse bg-line/30" />
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basics */}
+          {/* Basics & Bilingual Info */}
           <Card className="p-6">
-            <h2 className="text-base font-bold text-ink-heading">{t('admin.form.section.basics')}</h2>
+            <h2 className="text-base font-bold text-ink-heading">Thông tin cơ bản & Song ngữ</h2>
             <div className="mt-4 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="Mã căn hộ *" required>
@@ -396,15 +354,30 @@ export function AdminApartmentFormPage() {
                   </Select>
                 </Field>
               </div>
-              <Field label="Tên căn hộ (Tiếng Việt) *" required>
-                <Input value={form.title_vi} onChange={(e) => handleTitleChange(e.target.value)} required placeholder="Ví dụ: Căn Hộ Vinhomes Central Park Studio Cao Cấp" />
-              </Field>
+
+              {/* Title Bilingual */}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Tên căn hộ (Tiếng Việt) *" required>
+                  <Input value={form.title_vi} onChange={(e) => handleTitleChange(e.target.value)} required placeholder="Ví dụ: Căn Hộ Vinhomes Central Park Studio Cao Cấp" />
+                </Field>
+                <Field label="Tên căn hộ (Tiếng Anh)">
+                  <Input value={form.title_en} onChange={(e) => update({ title_en: e.target.value })} placeholder="Ví dụ: Vinhomes Central Park Luxury Studio Apartment" />
+                </Field>
+              </div>
+
               <Field label="Đường dẫn tĩnh (Slug) *" hint="vinhomes-central-park-studio">
                 <Input value={form.slug} onChange={(e) => handleSlugChange(e.target.value)} placeholder="vinhomes-central-park-studio" />
               </Field>
-              <Field label="Mô tả chi tiết">
-                <Textarea rows={4} value={form.description_vi} onChange={(e) => update({ description_vi: e.target.value })} placeholder="Nhập thông tin mô tả chi tiết về căn hộ..." />
-              </Field>
+
+              {/* Description Bilingual */}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Mô tả chi tiết (Tiếng Việt)">
+                  <Textarea rows={4} value={form.description_vi} onChange={(e) => update({ description_vi: e.target.value })} placeholder="Nhập thông tin mô tả chi tiết bằng tiếng Việt..." />
+                </Field>
+                <Field label="Mô tả chi tiết (Tiếng Anh)">
+                  <Textarea rows={4} value={form.description_en} onChange={(e) => update({ description_en: e.target.value })} placeholder="Enter detailed description in English..." />
+                </Field>
+              </div>
             </div>
           </Card>
 
@@ -412,8 +385,8 @@ export function AdminApartmentFormPage() {
           <Card className="p-6">
             <h2 className="text-base font-bold text-ink-heading">Thông tin giá & Chi tiết</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <Field label="Giá thuê / tháng (VND) *" required>
-                <Input type="number" value={form.rent_price} onChange={(e) => update({ rent_price: e.target.value })} required />
+              <Field label="Giá thuê / tháng (VNĐ) *" required>
+                <Input type="number" value={form.rent_price} onChange={(e) => update({ rent_price: e.target.value })} required placeholder="Ví dụ: 12000000" />
               </Field>
               <Field label="Diện tích (m²)">
                 <Input type="number" value={form.area} onChange={(e) => update({ area: e.target.value })} />
@@ -424,16 +397,16 @@ export function AdminApartmentFormPage() {
               <Field label="Số phòng tắm *" required>
                 <Input type="number" min={1} value={form.bathrooms} onChange={(e) => update({ bathrooms: parseInt(e.target.value) || 1 })} required />
               </Field>
-              <Field label="Giá điện (VND / kWh)">
+              <Field label="Giá điện (VNĐ / kWh)">
                 <Input type="number" value={form.electricity_price} onChange={(e) => update({ electricity_price: e.target.value })} placeholder="Ví dụ: 4000" />
               </Field>
-              <Field label="Giá nước (VND / m³ hoặc người)">
+              <Field label="Giá nước (VNĐ / m³ hoặc người)">
                 <Input type="number" value={form.water_price} onChange={(e) => update({ water_price: e.target.value })} placeholder="Ví dụ: 100000" />
               </Field>
-              <Field label="Phí gửi xe (VND / xe / tháng)">
+              <Field label="Phí gửi xe (VNĐ / xe / tháng)">
                 <Input type="number" value={form.parking_fee} onChange={(e) => update({ parking_fee: e.target.value })} placeholder="Ví dụ: 150000" />
               </Field>
-              <Field label="Phí quản lý (VND / tháng)">
+              <Field label="Phí quản lý (VNĐ / tháng)">
                 <Input type="number" value={form.management_fee} onChange={(e) => update({ management_fee: e.target.value })} />
               </Field>
             </div>
@@ -460,53 +433,6 @@ export function AdminApartmentFormPage() {
                   <Input value={form.address} onChange={(e) => update({ address: e.target.value })} placeholder="Ví dụ: 208 Nguyễn Hữu Cảnh, Phường 22, Bình Thạnh" required />
                 </Field>
               </div>
-              <Field label="Vĩ độ (Latitude)">
-                <Input type="number" step="any" value={form.latitude} onChange={(e) => update({ latitude: e.target.value })} placeholder="Ví dụ: 10.7947" />
-              </Field>
-              <Field label="Kinh độ (Longitude)">
-                <Input type="number" step="any" value={form.longitude} onChange={(e) => update({ longitude: e.target.value })} placeholder="Ví dụ: 106.7218" />
-              </Field>
-            </div>
-          </Card>
-
-          {/* Contact */}
-          <Card className="p-6">
-            <h2 className="text-base font-bold text-ink-heading">Thông tin liên hệ</h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <Field label="Số điện thoại liên hệ">
-                <Input value={form.contact_phone} onChange={(e) => update({ contact_phone: e.target.value })} placeholder="Ví dụ: 0935057511" />
-              </Field>
-              <Field label="Liên kết Zalo (URL hoặc SĐT)">
-                <Input value={form.contact_zalo} onChange={(e) => update({ contact_zalo: e.target.value })} placeholder="Ví dụ: https://zalo.me/0935057511" />
-              </Field>
-            </div>
-          </Card>
-
-          {/* Amenities */}
-          <Card className="p-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-ink-heading">{t('admin.form.section.amenities')}</h2>
-              <span className="text-xs text-ink-muted">{t('admin.form.amenitiesHint')}</span>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {allAmenities.map((a) => {
-                const active = selectedAmenities.includes(String(a.id));
-                return (
-                  <button
-                    key={a.id}
-                    type="button"
-                    onClick={() => toggleAmenity(String(a.id))}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                      active
-                        ? 'border-primary bg-primary-soft text-primary'
-                        : 'border-line bg-surface text-ink-body hover:border-primary/50'
-                    }`}
-                  >
-                    {active && <Check className="h-3.5 w-3.5" />}
-                    {a.name_vi}
-                  </button>
-                );
-              })}
             </div>
           </Card>
 

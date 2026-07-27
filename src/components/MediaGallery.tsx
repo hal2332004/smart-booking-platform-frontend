@@ -40,14 +40,26 @@ function MediaCell({
   alt: string;
   className?: string;
 }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Seek to 0.1s after metadata loads so the browser renders the first frame as preview
+  const handleLoadedMetadata = () => {
+    const vid = videoRef.current;
+    if (vid && vid.readyState >= 1) {
+      vid.currentTime = 0.1;
+    }
+  };
+
   if (item.type === 'video') {
     return (
       <>
         <video
+          ref={videoRef}
           src={item.url}
           muted
           playsInline
           preload="metadata"
+          onLoadedMetadata={handleLoadedMetadata}
           className={`h-full w-full object-cover ${className}`}
         />
         {/* Subtle centered play indicator — no white card, matches image aesthetic */}
@@ -315,7 +327,7 @@ export function MediaGallery({
                 {extraCount > 0 && (
                   <button
                     onClick={() => openLightbox(2)}
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-ink-heading/55 backdrop-blur-[2px] transition hover:bg-ink-heading/65"
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-black/35 backdrop-blur-[1px] transition hover:bg-black/45"
                   >
                     <Grid2x2 className="h-5 w-5 text-white" />
                     <span className="text-sm font-bold text-white">
@@ -360,7 +372,7 @@ export function MediaGallery({
               {extraCount > 0 && (
                 <button
                   onClick={() => openLightbox(4)}
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-ink-heading/55 backdrop-blur-[2px] transition hover:bg-ink-heading/65"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-black/35 backdrop-blur-[1px] transition hover:bg-black/45"
                 >
                   <Grid2x2 className="h-5 w-5 text-white" />
                   <span className="text-sm font-bold text-white">

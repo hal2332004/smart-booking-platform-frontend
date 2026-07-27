@@ -11,6 +11,7 @@ const en: Dict = {
   'nav.apartments': 'Apartments',
   'nav.admin': 'Admin',
   'nav.signin': 'Sign in',
+  'currency.title': 'Currency',
 
   'cta.browse': 'Browse apartments',
   'cta.contact': 'Contact landlord',
@@ -22,7 +23,7 @@ const en: Dict = {
   'home.hero.eyebrow': 'Verified · Flexible viewings · Fast support',
   'home.hero.title': 'Find a place you will love to call home.',
   'home.hero.subtitle':
-    'Browse curated, verified apartments across Vietnam. Transparent pricing, trusted landlords, and a booking experience built around you.',
+    'Browse curated, verified apartments across Da Nang. Transparent pricing, trusted landlords, and a booking experience built around you.',
   'home.hero.search.placeholder': 'Search by city, district, or name…',
 
   'home.chip.verified': 'Verified listings',
@@ -48,8 +49,8 @@ const en: Dict = {
     'No hidden fees, no surprises. The price you see is the price you pay.',
 
   'home.featured.eyebrow': 'Featured homes',
-  'home.featured.title': 'Hand-picked apartments, ready to move in.',
-  'home.featured.subtitle': 'A selection of our most-loved listings this month.',
+  'home.featured.title': 'Hand-picked apartments in Da Nang, ready to move in.',
+  'home.featured.subtitle': 'A selection of our most-loved listings in Da Nang this month.',
   'home.featured.empty': 'No featured apartments yet. Check back soon.',
 
   'home.stats.listings': 'Verified listings',
@@ -59,6 +60,15 @@ const en: Dict = {
 
   'home.testimonials.eyebrow': 'Loved by tenants',
   'home.testimonials.title': 'People found their home with SmartBooking.',
+  'home.t1.name': 'Linh N.',
+  'home.t1.city': 'Da Nang',
+  'home.t1.text': 'I found my apartment in three days. The listings were accurate and the landlord replied within an hour.',
+  'home.t2.name': 'Marcus W.',
+  'home.t2.city': 'Da Nang',
+  'home.t2.text': 'Clean, fast, and no surprises. The booking viewing flow is the best I have used in Vietnam.',
+  'home.t3.name': 'Quang T.',
+  'home.t3.city': 'Da Nang',
+  'home.t3.text': 'I trusted the verified badge — and it was right. Everything matched the photos and description.',
 
   'home.cta.title': 'Ready to find your next home?',
   'home.cta.subtitle': 'Browse verified apartments or talk to our team — no pressure, no spam.',
@@ -67,6 +77,8 @@ const en: Dict = {
   'list.subtitle': 'Browse verified rentals and filter by what matters to you.',
   'list.filters': 'Filters',
   'list.filters.city': 'City',
+  'list.filters.district': 'District / Ward',
+  'list.filters.districtPlaceholder': 'Type or select district/ward…',
   'list.filters.type': 'Property type',
   'list.filters.bedrooms': 'Bedrooms',
   'list.filters.minPrice': 'Min price',
@@ -115,6 +127,7 @@ const en: Dict = {
   'detail.managementIncl': 'Included',
   'detail.amenitiesTitle': 'Apartment amenities',
   'detail.mapNote': 'Central location, convenient access to schools, shopping centres and the beach.',
+  'detail.openGoogleMaps': 'Open in Google Maps',
   'detail.similarNote': 'Other apartments in the same area you may be interested in.',
   'detail.saved': 'Saved',
   'detail.save': 'Save',
@@ -168,6 +181,19 @@ const en: Dict = {
   'admin.workflow.manage': 'Manage listings',
   'admin.workflow.byCity': 'Listings by city',
   'admin.workflow.byStatus': 'Listings by status',
+
+  'admin.dashboard.views': 'Total Views',
+  'admin.dashboard.visitors': 'Unique Visitors',
+  'admin.dashboard.activeListings': 'Active Listings',
+  'admin.dashboard.traffic': 'Traffic Overview',
+  'admin.dashboard.trafficLast7Days': 'Last 7 days',
+  'admin.dashboard.geographic': 'Geographic Distribution',
+  'admin.dashboard.topSearches': 'Top Search Keywords',
+  'admin.dashboard.devices': 'Device Usage',
+  'admin.dashboard.mostViewed': 'Most Viewed Apartments',
+  'admin.dashboard.desktop': 'Desktop',
+  'admin.dashboard.mobile': 'Mobile',
+  'admin.dashboard.viewsCount': 'views',
 
   'admin.apartments.title': 'Apartment management',
   'admin.apartments.subtitle': 'Create, edit, and publish your rental listings.',
@@ -227,6 +253,8 @@ const en: Dict = {
   'common.perMonth': '/ month',
   'common.beds': 'bedrooms',
   'common.baths': 'bathrooms',
+  'common.bedsShort': 'beds',
+  'common.bathsShort': 'baths',
   'common.area': 'm²',
 
   'footer.about': 'SmartBooking is a premium apartment rental platform connecting trusted landlords with tenants across Vietnam.',
@@ -249,6 +277,7 @@ const vi: Dict = {
   'nav.apartments': 'Căn hộ',
   'nav.admin': 'Quản trị',
   'nav.signin': 'Đăng nhập',
+  'currency.title': 'Chuyển đổi tiền tệ',
 
   'cta.browse': 'Xem căn hộ',
   'cta.contact': 'Liên hệ chủ nhà',
@@ -260,7 +289,7 @@ const vi: Dict = {
   'home.hero.eyebrow': 'Đã xác minh · Xem phòng linh hoạt · Hỗ trợ nhanh',
   'home.hero.title': 'Tìm một nơi bạn sẽ yêu gọi là nhà.',
   'home.hero.subtitle':
-    'Khám phá các căn hộ đã được xác minh trên khắp Việt Nam. Giá minh bạch, chủ nhà đáng tin cậy và trải nghiệm đặt phòng dành cho bạn.',
+    'Khám phá các căn hộ đã được xác minh tại Đà Nẵng. Giá minh bạch, chủ nhà đáng tin cậy và trải nghiệm đặt phòng dành riêng cho bạn.',
   'home.hero.search.placeholder': 'Tìm theo thành phố, quận hoặc tên…',
 
   'home.chip.verified': 'Căn hộ đã xác minh',
@@ -287,8 +316,8 @@ const vi: Dict = {
     'Không phụ phí ẩn, không bất ngờ. Giá bạn thấy là giá bạn trả.',
 
   'home.featured.eyebrow': 'Căn hộ nổi bật',
-  'home.featured.title': 'Căn hộ chọn lọc, sẵn sàng dọn vào.',
-  'home.featured.subtitle': 'Những căn hộ được yêu thích nhất trong tháng này.',
+  'home.featured.title': 'Căn hộ chọn lọc tại Đà Nẵng, sẵn sàng dọn vào.',
+  'home.featured.subtitle': 'Những căn hộ được yêu thích nhất tại Đà Nẵng trong tháng này.',
   'home.featured.empty': 'Chưa có căn hộ nổi bật. Vui lòng quay lại sau.',
 
   'home.stats.listings': 'Căn hộ đã xác minh',
@@ -298,6 +327,15 @@ const vi: Dict = {
 
   'home.testimonials.eyebrow': 'Khách hàng yêu mến',
   'home.testimonials.title': 'Nhiều người đã tìm thấy nhà với SmartBooking.',
+  'home.t1.name': 'Linh N.',
+  'home.t1.city': 'Đà Nẵng',
+  'home.t1.text': 'Tôi đã tìm thấy căn hộ của mình chỉ trong 3 ngày. Thông tin bài đăng chuẩn xác và chủ nhà phản hồi trong vòng 1 giờ.',
+  'home.t2.name': 'Marcus W.',
+  'home.t2.city': 'Đà Nẵng',
+  'home.t2.text': 'Rõ ràng, nhanh chóng và không có bất ngờ phụ phí. Quy trình đặt lịch xem phòng là trải nghiệm tốt nhất tôi từng dùng tại Việt Nam.',
+  'home.t3.name': 'Quang T.',
+  'home.t3.city': 'Đà Nẵng',
+  'home.t3.text': 'Tôi đã tin tưởng vào huy hiệu Đã xác minh — và nó hoàn toàn chính xác. Mọi thứ thực tế đều đúng như ảnh chụp và mô tả.',
 
   'home.cta.title': 'Sẵn sàng tìm nhà mới?',
   'home.cta.subtitle': 'Xem căn hộ đã xác minh hoặc trò chuyện cùng đội ngũ — không áp lực, không spam.',
@@ -306,6 +344,8 @@ const vi: Dict = {
   'list.subtitle': 'Duyệt căn hộ đã xác minh và lọc theo nhu cầu của bạn.',
   'list.filters': 'Bộ lọc',
   'list.filters.city': 'Thành phố',
+  'list.filters.district': 'Quận / Huyện / Phường',
+  'list.filters.districtPlaceholder': 'Nhập hoặc chọn quận/huyện…',
   'list.filters.type': 'Loại hình',
   'list.filters.bedrooms': 'Phòng ngủ',
   'list.filters.minPrice': 'Giá tối thiểu',
@@ -354,6 +394,7 @@ const vi: Dict = {
   'detail.managementIncl': 'Đã bao gồm',
   'detail.amenitiesTitle': 'Tiện ích căn hộ',
   'detail.mapNote': 'Vị trí trung tâm, thuận tiện di chuyển tới trường học, trung tâm thương mại và bãi biển.',
+  'detail.openGoogleMaps': 'Xem trên Google Maps',
   'detail.similarNote': 'Các căn hộ cùng khu vực có thể bạn sẽ quan tâm.',
   'detail.saved': 'Đã lưu',
   'detail.save': 'Lưu',
@@ -407,6 +448,19 @@ const vi: Dict = {
   'admin.workflow.manage': 'Quản lý căn hộ',
   'admin.workflow.byCity': 'Căn hộ theo thành phố',
   'admin.workflow.byStatus': 'Căn hộ theo trạng thái',
+
+  'admin.dashboard.views': 'Tổng lượt xem',
+  'admin.dashboard.visitors': 'Khách truy cập',
+  'admin.dashboard.activeListings': 'Đang hiển thị',
+  'admin.dashboard.traffic': 'Lưu lượng truy cập',
+  'admin.dashboard.trafficLast7Days': '7 ngày qua',
+  'admin.dashboard.geographic': 'Vị trí địa lý',
+  'admin.dashboard.topSearches': 'Từ khóa tìm kiếm hàng đầu',
+  'admin.dashboard.devices': 'Thiết bị',
+  'admin.dashboard.mostViewed': 'Căn hộ xem nhiều nhất',
+  'admin.dashboard.desktop': 'Máy tính',
+  'admin.dashboard.mobile': 'Điện thoại',
+  'admin.dashboard.viewsCount': 'lượt xem',
 
   'admin.apartments.title': 'Quản lý căn hộ',
   'admin.apartments.subtitle': 'Tạo, chỉnh sửa và đăng căn hộ cho thuê.',
@@ -466,9 +520,11 @@ const vi: Dict = {
   'common.perMonth': '/ tháng',
   'common.beds': 'phòng ngủ',
   'common.baths': 'phòng tắm',
+  'common.bedsShort': 'PN',
+  'common.bathsShort': 'PT',
   'common.area': 'm²',
 
-  'footer.about': 'SmartBooking là nền tảng cho thuê căn hộ cao cấp, kết nối chủ nhà đáng tin cậy với khách thuê trên khắp Việt Nam.',
+  'footer.about': 'SmartBooking là nền tảng cho thuê căn hộ cao cấp, kết nối chủ nhà đáng tin cậy với khách thuê tại Đà Nẵng.',
   'footer.explore': 'Khám phá',
   'footer.company': 'Công ty',
   'footer.legal': 'Pháp lý',

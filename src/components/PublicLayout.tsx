@@ -3,6 +3,7 @@ import { Building2, Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '@/lib/i18n';
 import { LanguageToggle } from '@/components/LanguageToggle';
+import { CurrencyToggle } from '@/components/CurrencyToggle';
 
 const facebookLink = import.meta.env.VITE_FACEBOOK_LINK;
 const zaloLink = import.meta.env.VITE_ZALO_LINK;
@@ -96,14 +97,9 @@ export function PublicLayout() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-2.5 md:flex">
+            <CurrencyToggle />
             <LanguageToggle />
-            <Link
-              to="/admin/login"
-              className="inline-flex items-center rounded-sm border border-line px-3.5 py-2 text-sm font-semibold text-ink-heading transition hover:border-primary hover:text-primary"
-            >
-              {t('nav.signin')}
-            </Link>
           </div>
 
           <button
@@ -133,15 +129,11 @@ export function PublicLayout() {
                   {item.label}
                 </NavLink>
               ))}
-              <div className="flex items-center justify-between pt-2">
-                <LanguageToggle />
-                <Link
-                  to="/admin/login"
-                  onClick={() => setOpen(false)}
-                  className="text-sm font-semibold text-primary"
-                >
-                  {t('nav.signin')}
-                </Link>
+              <div className="flex items-center justify-between gap-2 pt-2 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <CurrencyToggle />
+                  <LanguageToggle />
+                </div>
               </div>
             </div>
           </div>

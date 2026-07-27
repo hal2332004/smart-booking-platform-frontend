@@ -17,8 +17,12 @@ function mapApartmentCompat(a: any): Apartment {
   if (!a) return a;
   return {
     ...a,
-    title: a.title || a.title_vi || '',
-    description: a.description || a.description_vi || '',
+    title_vi: a.title_vi || a.title || '',
+    title_en: a.title_en || '',
+    description_vi: a.description_vi || a.description || '',
+    description_en: a.description_en || '',
+    title: a.title_vi || a.title || '',
+    description: a.description_vi || a.description || '',
     rent: a.rent !== undefined ? a.rent : (a.rent_price || 0),
     currency: a.currency || 'VND',
     city: a.city || a.cities?.name_vi || '',
@@ -27,6 +31,21 @@ function mapApartmentCompat(a: any): Apartment {
     status: a.published ? 'published' : 'draft',
     images: a.images || a.apartment_media?.map((m: any) => m.storage_path) || [],
     amenities: a.amenities || a.apartment_amenities?.map((am: any) => am.amenities?.name_vi || '') || [],
+  };
+}
+
+export function localizeApartment(a: Apartment, lang: string): Apartment {
+  if (!a) return a;
+  const isEn = lang === 'en';
+  return {
+    ...a,
+    title: isEn ? (a.title_en || a.title_vi || a.title) : (a.title_vi || a.title_en || a.title),
+    description: isEn ? (a.description_en || a.description_vi || a.description) : (a.description_vi || a.description_en || a.description),
+    city: isEn ? (a.cities?.name_en || a.cities?.name_vi || a.city) : (a.cities?.name_vi || a.cities?.name_en || a.city),
+    district: isEn ? (a.districts?.name_en || a.districts?.name_vi || a.district) : (a.districts?.name_vi || a.districts?.name_en || a.district),
+    amenities: a.apartment_amenities 
+      ? a.apartment_amenities.map((am: any) => isEn ? (am.amenities?.name_en || am.amenities?.name_vi || '') : (am.amenities?.name_vi || am.amenities?.name_en || ''))
+      : a.amenities
   };
 }
 

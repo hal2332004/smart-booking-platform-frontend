@@ -3,9 +3,13 @@ import { BedDouble, Bath, Maximize, MapPin } from 'lucide-react';
 import type { Apartment } from '@/lib/types';
 import { formatPrice } from '@/lib/format';
 import { useI18n } from '@/lib/i18n';
+import { useCurrency } from '@/lib/currencyContext';
+import { localizeApartment } from '@/lib/apartmentService';
 
-export function ApartmentCard({ apartment }: { apartment: Apartment }) {
-  const { t } = useI18n();
+export function ApartmentCard({ apartment: rawApartment }: { apartment: Apartment }) {
+  const { t, language } = useI18n();
+  const { currency } = useCurrency();
+  const apartment = localizeApartment(rawApartment, language);
   const cover = apartment.images?.[0];
 
   return (
@@ -28,12 +32,12 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
         )}
         <div className="absolute left-3 top-3 flex gap-2">
           {apartment.featured && (
-            <span className="badge bg-white/90 text-primary shadow-soft">{t('detail.featured')}</span>
+            <span className="badge bg-white/90 text-primary shadow-soft font-bold">{t('detail.featured')}</span>
           )}
         </div>
-        <div className="absolute bottom-3 right-3 rounded-sm bg-ink-heading/85 px-2.5 py-1 text-sm font-bold text-white backdrop-blur">
-          {formatPrice(apartment.rent, apartment.currency)}
-          <span className="ml-0.5 text-xs font-medium text-white/70">{t('common.perMonth')}</span>
+        <div className="absolute bottom-3 right-3 max-w-[calc(100%-1.5rem)] rounded-sm bg-ink-heading/90 px-2.5 py-1 text-xs font-bold text-white backdrop-blur shadow-soft truncate">
+          {formatPrice(apartment.rent, currency)}
+          <span className="ml-1 text-[11px] font-normal text-white/80">{t('common.perMonth')}</span>
         </div>
       </div>
 
@@ -43,7 +47,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
             {apartment.title}
           </h3>
           <p className="mt-1 flex items-center gap-1 text-xs text-ink-muted">
-            <MapPin className="h-3.5 w-3.5 shrink-0" />
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-primary/70" />
             <span className="line-clamp-1">
               {apartment.district ? `${apartment.district}, ` : ''}
               {apartment.city}
@@ -51,19 +55,19 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
           </p>
         </div>
 
-        <div className="flex items-center gap-4 border-t border-line pt-3 text-xs font-medium text-ink-body">
-          <span className="inline-flex items-center gap-1.5">
-            <BedDouble className="h-4 w-4 text-primary" />
-            {apartment.bedrooms} {t('common.beds')}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Bath className="h-4 w-4 text-primary" />
-            {apartment.bathrooms} {t('common.baths')}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Maximize className="h-4 w-4 text-primary" />
-            {apartment.area} {t('common.area')}
-          </span>
+        <div className="grid grid-cols-3 gap-1 border-t border-line pt-3 text-xs font-medium text-ink-body">
+          <div className="flex items-center justify-center gap-1.5 min-w-0 text-center" title={`${apartment.bedrooms} ${t('common.beds')}`}>
+            <BedDouble className="h-3.5 w-3.5 text-primary shrink-0" />
+            <span className="truncate font-semibold">{apartment.bedrooms} {t('common.bedsShort')}</span>
+          </div>
+          <div className="flex items-center justify-center gap-1.5 min-w-0 border-x border-line/60 px-1 text-center" title={`${apartment.bathrooms} ${t('common.baths')}`}>
+            <Bath className="h-3.5 w-3.5 text-primary shrink-0" />
+            <span className="truncate font-semibold">{apartment.bathrooms} {t('common.bathsShort')}</span>
+          </div>
+          <div className="flex items-center justify-center gap-1.5 min-w-0 text-center" title={`${apartment.area} ${t('common.area')}`}>
+            <Maximize className="h-3.5 w-3.5 text-primary shrink-0" />
+            <span className="truncate font-semibold">{apartment.area} {t('common.area')}</span>
+          </div>
         </div>
       </div>
     </Link>

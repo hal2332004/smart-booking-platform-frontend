@@ -3,25 +3,29 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft, BedDouble, Bath, Maximize, MapPin, Check,
   CalendarClock, Building2, ShieldCheck, Phone, Share2, Sparkles,
-  CheckCircle2, Heart
+  CheckCircle2, Heart, ExternalLink
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
-import { fetchApartmentBySlug, fetchPublishedApartments } from '@/lib/apartmentService';
+import { useCurrency } from '@/lib/currencyContext';
+import { fetchApartmentBySlug, fetchPublishedApartments, localizeApartment } from '@/lib/apartmentService';
 import type { Apartment } from '@/lib/types';
 import { formatPrice } from '@/lib/format';
 import { Button } from '@/components/ui/Button';
 import { Card, Badge, Spinner } from '@/components/ui/Card';
 import { ApartmentCard } from '@/components/ApartmentCard';
 import { MediaGallery } from '@/components/MediaGallery';
+import { SEO } from '@/components/SEO';
 
 const facebookLinkEnv = import.meta.env.VITE_FACEBOOK_LINK;
 const zaloLinkEnv = import.meta.env.VITE_ZALO_LINK;
+const hotlineEnv = import.meta.env.VITE_HOTLINE;
 
 export function ApartmentDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t, language } = useI18n();
+  const { currency } = useCurrency();
   const navigate = useNavigate();
-  const [apartment, setApartment] = useState<Apartment | null>(null);
+  const [rawApartment, setRawApartment] = useState<Apartment | null>(null);
   const [similar, setSimilar] = useState<Apartment[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -36,7 +40,7 @@ export function ApartmentDetailPage() {
       .then((data) => {
         if (!data) setNotFound(true);
         else {
-          setApartment(data);
+          setRawApartment(data);
           fetchPublishedApartments()
             .then((all) => setSimilar(all.filter((a) => a.id !== data.id && a.city === data.city).slice(0, 3)))
             .catch(() => setSimilar([]));
@@ -62,7 +66,7 @@ export function ApartmentDetailPage() {
     );
   }
 
-  if (notFound || !apartment) {
+  if (notFound || !rawApartment) {
     return (
       <div className="container-app py-24 text-center">
         <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-line/50 text-ink-muted">
@@ -74,6 +78,8 @@ export function ApartmentDetailPage() {
       </div>
     );
   }
+
+  const apartment = localizeApartment(rawApartment, language);
 
   // Map backend media to image/video URLs
   const media = (apartment.apartment_media ?? []).map((m) => ({
@@ -90,10 +96,14 @@ export function ApartmentDetailPage() {
 
   const zaloTarget = apartment.contact_zalo || zaloLinkEnv;
   const fbTarget = facebookLinkEnv;
-  const phoneTarget = apartment.contact_phone || '0905 123 456';
+  const phoneTarget = apartment.contact_phone || hotlineEnv || '';
+
+  const fullAddressQuery = `${apartment.address ? `${apartment.address}, ` : ''}${apartment.district ? `${apartment.district}, ` : ''}${apartment.city || 'Đà Nẵng'}`;
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddressQuery)}`;
 
   return (
     <div className="bg-canvas/40 pb-20">
+      <SEO title={apartment.title} description={apartment.description} image={media[0]?.url} />
       {/* Top Header & Gallery Area */}
       <div className="bg-surface border-b border-line pb-8">
         <div className="container-app py-4 flex items-center justify-between">
@@ -242,10 +252,19 @@ export function ApartmentDetailPage() {
                   title="Bản đồ vị trí căn hộ"
                   className="absolute -top-[105px] -left-[10px] h-[430px] w-[calc(100%+20px)] border-0"
                   scrolling="no"
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(
-                    `${apartment.address ? `${apartment.address}, ` : ''}${apartment.district ? `${apartment.district}, ` : ''}${apartment.city || 'Đà Nẵng'}`
-                  )}&t=&z=15&ie=UTF8&iwloc=near&output=embed`}
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(fullAddressQuery)}&t=&z=15&ie=UTF8&iwloc=near&output=embed`}
                 ></iframe>
+              </div>
+              <div className="mt-3 flex justify-end">
+                <a
+                  href={googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3.5 py-2 text-xs font-bold text-primary shadow-soft transition-all duration-200 hover:border-primary hover:bg-primary-soft/50 hover:shadow-card"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  <span>{t('detail.openGoogleMaps')}</span>
+                </a>
               </div>
             </Card>
           </div>
@@ -258,7 +277,7 @@ export function ApartmentDetailPage() {
                 <p className="text-xs font-bold uppercase tracking-wider text-primary">{t('detail.priceLabel')}</p>
                 <div className="mt-2 flex items-baseline justify-center gap-1.5 flex-wrap">
                   <span className="text-2xl font-black tracking-tight text-ink-heading sm:text-3xl whitespace-nowrap">
-                    {formatPrice(apartment.rent, apartment.currency)}
+                    {formatPrice(apartment.rent, currency)}
                   </span>
                   <span className="text-xs font-bold uppercase tracking-wide text-ink-muted whitespace-nowrap">
                     {t('detail.perMonth')}

@@ -9,17 +9,20 @@ export type ApartmentStatus = 'published' | 'draft';
 export interface City {
   id: string;
   name_vi: string;
+  name_en?: string;
 }
 
 export interface District {
   id: string;
   name_vi: string;
+  name_en?: string;
   city_id: string;
 }
 
 export interface Amenity {
   id: string;
   name_vi: string;
+  name_en?: string;
   icon_name: string;
 }
 
@@ -40,7 +43,9 @@ export interface Apartment {
   slug: string;
   code: string;
   title_vi: string;
+  title_en?: string;
   description_vi: string;
+  description_en?: string;
   rent_price: number;
   electricity_price: number;
   water_price: number;
@@ -110,11 +115,17 @@ export const DEFAULT_FILTERS: ApartmentFilters = {
 };
 
 // ---------------------------------------------------------------------------
-// Legacy constant exports retained for compatibility with existing pages.
-// The new backend‑driven data will be fetched via `locationService` and
-// `amenityService`. For now we provide empty placeholder arrays so the imports
-// resolve and the app can compile. These can be replaced with dynamic data later.
+// Nền tảng hiện tại chỉ phục vụ Đà Nẵng (đã sáp nhập Quảng Nam).
 // ---------------------------------------------------------------------------
-export const CITIES: string[] = [];
-export const PROPERTY_TYPES: string[] = [];
+export const CITIES: string[] = ['Đà Nẵng'];
+
+export const PROPERTY_TYPES: string[] = [
+  'serviced',
+  'apartment',
+  'studio',
+  'penthouse',
+  'duplex',
+];
+
 export const ALL_AMENITIES: string[] = [];
+

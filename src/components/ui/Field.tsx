@@ -1,4 +1,5 @@
 import type { InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes, ReactNode } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 export function Field({ label, hint, required, children }: { label?: string; hint?: string; required?: boolean; children: ReactNode }) {
   return (
@@ -24,6 +25,12 @@ export function Textarea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
 
 export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select {...props} className={`input-base appearance-none bg-surface pr-9 ${props.className ?? ''}`} />
+    <div className="relative w-full">
+      <select
+        {...props}
+        className={`input-base appearance-none bg-surface pr-8 truncate cursor-pointer w-full ${props.className ?? ''}`}
+      />
+      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
+    </div>
   );
 }
