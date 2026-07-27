@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    
+    <!-- Building Inner Glow/Shadow -->
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Rounded Background Container -->
+  <rect width="512" height="512" rx="128" fill="url(#bg-grad)" />
+
+  <!-- Stylized Geometric Building/Apartment Concept -->
+  <g filter="url(#soft-shadow)" fill="#ffffff">
+    <!-- Main Left Tower -->
+    <rect x="130" y="140" width="110" height="240" rx="16" />
+    <!-- Secondary Right Tower -->
+    <rect x="260" y="200" width="120" height="180" rx="16" />
+    
+    <!-- Connector Base -->
+    <rect x="130" y="340" width="250" height="40" rx="8" />
+  </g>
+
+  <!-- Windows (using high-contrast soft blue fills) -->
+  <g>
+    <!-- Left Tower Windows -->
+    <rect x="155" y="170" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="195" y="170" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="155" y="215" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="195" y="215" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="155" y="260" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="195" y="260" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="155" y="305" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="195" y="305" width="24" height="24" rx="6" fill="#eff4ff" />
+
+    <!-- Right Tower Windows -->
+    <rect x="285" y="230" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="325" y="230" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="285" y="275" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="325" y="275" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="285" y="320" width="24" height="24" rx="6" fill="#eff4ff" />
+    <rect x="325" y="320" width="24" height="24" rx="6" fill="#eff4ff" />
+  </g>
+</svg>

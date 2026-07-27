@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 125%;
+  }
+  body {
+    @apply bg-canvas text-ink-body font-sans antialiased;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    @apply text-ink-heading font-bold tracking-tight;
+    line-height: 1.2;
+  }
+  ::selection {
+    @apply bg-primary/15 text-primary-hover;
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
+  }
+
+  .card {
+    @apply rounded-lg border border-line bg-surface shadow-soft;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lift;
+  }
+
+  .input-base {
+    @apply w-full rounded-sm border border-line bg-surface px-3.5 py-2.5 text-sm text-ink-heading placeholder:text-ink-muted/70 transition focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10;
+  }
+
+  .label-base {
+    @apply mb-1.5 block text-sm font-semibold text-ink-heading;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1 text-xs font-semibold text-ink-body;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wide;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
