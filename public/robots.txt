@@ -4,4 +4,4 @@ Allow: /apartments
 Disallow: /admin
 Disallow: /admin/*
 
-Sitemap: https://smartbooking.vn/sitemap.xml
+Sitemap: https://smart-booking-platform-frontend.vercel.app/sitemap.xml
