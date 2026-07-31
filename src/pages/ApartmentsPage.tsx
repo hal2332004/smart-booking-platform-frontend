@@ -27,6 +27,8 @@ export function ApartmentsPage() {
     search: searchParams.get('search') ?? '',
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [page, setPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
 
   useEffect(() => {
     fetchPublishedApartments()
@@ -194,6 +196,14 @@ export function ApartmentsPage() {
     });
   }, [apartments, filters]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  const displayed = useMemo(() => {
+    return filtered.slice(0, page * ITEMS_PER_PAGE);
+  }, [filtered, page]);
+
   const update = (patch: Partial<ApartmentFilters>) => setFilters((f) => ({ ...f, ...patch }));
   const reset = () => setFilters(DEFAULT_FILTERS);
 
@@ -211,11 +221,11 @@ export function ApartmentsPage() {
   }, [sliderMax, maxPriceRange, currency]);
 
   return (
-    <div className="container-app py-10 lg:py-14">
+    <div className="container-app py-4 lg:py-6">
       <SEO title={t('nav.apartments')} />
-      <div className="mb-8">
+      <div className="mb-4 sm:mb-6">
         <h1 className="text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('list.title')}</h1>
-        <p className="mt-2 text-base text-ink-body">{t('list.subtitle')}</p>
+        <p className="mt-1 sm:mt-2 text-sm sm:text-base text-ink-body">{t('list.subtitle')}</p>
       </div>
 
       <div className="mb-6 flex items-center gap-3 lg:hidden">
@@ -224,7 +234,7 @@ export function ApartmentsPage() {
         </Button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-[280px_1fr]">
         {/* Sidebar */}
         <aside className={`${showFilters ? 'block' : 'hidden'} lg:block`}>
           <Card className="sticky top-24 p-5 space-y-5">
@@ -338,7 +348,7 @@ export function ApartmentsPage() {
 
         {/* Results */}
         <section>
-          <div className="mb-5 flex items-center justify-between gap-3">
+          <div className="mb-4 flex items-center justify-between gap-3">
             <div className="relative flex-1 max-w-md">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
               <Input
@@ -373,11 +383,20 @@ export function ApartmentsPage() {
               </Button>
             </Card>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {filtered.map((a) => (
-                <ApartmentCard key={a.id} apartment={a} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-2 gap-3 sm:gap-6 xl:grid-cols-3">
+                {displayed.map((a) => (
+                  <ApartmentCard key={a.id} apartment={a} />
+                ))}
+              </div>
+              {displayed.length < filtered.length && (
+                <div className="mt-10 flex justify-center">
+                  <Button variant="outline" onClick={() => setPage((p) => p + 1)}>
+                    {t('cta.browse') || 'Xem thêm'}
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </section>
       </div>

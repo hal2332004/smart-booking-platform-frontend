@@ -252,6 +252,8 @@ export function MediaGallery({
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
 
+
+
   /* ── Empty state ── */
   if (count === 0) {
     return (
@@ -286,7 +288,7 @@ export function MediaGallery({
   if (count === 2) {
     return (
       <>
-        <div className="grid h-[340px] grid-cols-[3fr_2fr] gap-2 overflow-hidden rounded-xl shadow-card sm:h-[380px]">
+        <div className="grid aspect-[2/1] max-h-[380px] w-full grid-cols-2 gap-1 sm:gap-2 overflow-hidden rounded-xl shadow-card">
           <GalleryCell item={items[0]} alt={title} index={0} onClick={openLightbox} />
           <GalleryCell item={items[1]} alt={title} index={1} onClick={openLightbox} />
         </div>
@@ -308,11 +310,11 @@ export function MediaGallery({
           CSS Grid computes each row = (340px - gap) / 2 = explicit px height.
           absolute inset-0 children then resolve to that computed px height.
         */}
-        <div className="grid h-[340px] grid-cols-[3fr_2fr] gap-2 overflow-hidden rounded-xl shadow-card sm:h-[380px]">
+        <div className="grid aspect-[3/2] max-h-[380px] w-full grid-cols-[2fr_1fr] gap-1 sm:gap-2 overflow-hidden rounded-xl shadow-card">
           <GalleryCell item={items[0]} alt={title} index={0} onClick={openLightbox} />
 
           {/* Right panel: nested grid so each cell gets explicit pixel height from grid track */}
-          <div className="grid grid-rows-2 gap-2">
+          <div className="grid grid-rows-2 gap-1 sm:gap-2">
             {/* Top cell */}
             <div className="relative overflow-hidden">
               <div className="absolute inset-0">
@@ -351,12 +353,12 @@ export function MediaGallery({
   const extraCount = count - 5;
   return (
     <>
-      <div className="grid h-[340px] grid-cols-[3fr_2fr] gap-2 overflow-hidden rounded-xl shadow-card sm:h-[380px]">
+      <div className="grid aspect-[2/1] max-h-[380px] w-full grid-cols-2 gap-1 sm:gap-2 overflow-hidden rounded-xl shadow-card">
         {/* Hero */}
         <GalleryCell item={items[0]} alt={title} index={0} onClick={openLightbox} />
 
         {/* 2x2 right panel — grid item stretches to row height, nested grid distributes */}
-        <div className="grid grid-cols-2 grid-rows-2 gap-2">
+        <div className="grid grid-cols-2 grid-rows-2 gap-1 sm:gap-2">
           {[1, 2, 3].map((i) => (
             <div key={i} className="relative overflow-hidden">
               <div className="absolute inset-0">
@@ -386,7 +388,7 @@ export function MediaGallery({
       </div>
 
       {/* "Show all photos" pill button below */}
-      <div className="mt-3 flex justify-end">
+      <div className="mt-2 sm:mt-3 flex justify-end">
         <button
           onClick={() => openLightbox(0)}
           className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink-heading shadow-soft transition hover:border-primary hover:text-primary hover:shadow-card"

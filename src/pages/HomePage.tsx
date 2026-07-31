@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   Search, ShieldCheck, CalendarClock, Headphones, BadgeDollarSign,
-  ArrowRight, Star, Building2, MapPin, Sparkles,
+  ArrowRight, Star, Building2, MapPin, Sparkles, Mouse, ChevronDown
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 import { fetchFeaturedApartments } from '@/lib/apartmentService';
@@ -14,12 +14,63 @@ import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Card';
 import { SEO } from '@/components/SEO';
 
+function useAutoScroll(intervalMs = 3000) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    let intervalId: ReturnType<typeof setInterval>;
+
+    const startAutoScroll = () => {
+      clearInterval(intervalId);
+      if (el.scrollWidth > el.clientWidth) {
+        intervalId = setInterval(() => {
+          const maxScrollLeft = el.scrollWidth - el.clientWidth;
+          if (el.scrollLeft >= maxScrollLeft - 10) {
+            el.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            const firstChild = el.firstElementChild as HTMLElement;
+            const scrollAmount = firstChild ? firstChild.offsetWidth + 16 : 300;
+            el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+          }
+        }, intervalMs);
+      }
+    };
+
+    // Delay initial start slightly to ensure layout is ready
+    const initTimer = setTimeout(startAutoScroll, 500);
+    window.addEventListener('resize', startAutoScroll);
+
+    const stopAutoScroll = () => clearInterval(intervalId);
+    el.addEventListener('touchstart', stopAutoScroll, { passive: true });
+    el.addEventListener('touchend', startAutoScroll, { passive: true });
+    el.addEventListener('mouseenter', stopAutoScroll);
+    el.addEventListener('mouseleave', startAutoScroll);
+
+    return () => {
+      clearTimeout(initTimer);
+      clearInterval(intervalId);
+      window.removeEventListener('resize', startAutoScroll);
+      el.removeEventListener('touchstart', stopAutoScroll);
+      el.removeEventListener('touchend', startAutoScroll);
+      el.removeEventListener('mouseenter', stopAutoScroll);
+      el.removeEventListener('mouseleave', startAutoScroll);
+    };
+  }, [intervalMs]);
+
+  return scrollRef;
+}
+
 export function HomePage() {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState('');
+  
+  const featuresRef = useAutoScroll(3500);
+  const testimonialsRef = useAutoScroll(4500);
 
   useEffect(() => {
     fetchFeaturedApartments()
@@ -28,17 +79,9 @@ export function HomePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate(query ? `/apartments?search=${encodeURIComponent(query)}` : '/apartments');
-  };
 
-  const chips = [
-    { icon: ShieldCheck, label: t('home.chip.verified') },
-    { icon: CalendarClock, label: t('home.chip.flexible') },
-    { icon: Headphones, label: t('home.chip.support') },
-    { icon: Sparkles, label: t('home.chip.trusted') },
-  ];
+
+
 
   const features = [
     { icon: ShieldCheck, title: t('home.features.verified.title'), body: t('home.features.verified.body') },
@@ -63,17 +106,14 @@ export function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-[100dvh] flex flex-col justify-center pt-16 pb-20">
         <HeroSlideshow />
         <div className="absolute inset-0 bg-gradient-to-b from-ink-heading/80 via-ink-heading/70 to-ink-heading/85" />
         <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
         <div className="pointer-events-none absolute -left-24 top-40 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
-        <div className="container-app relative py-20 sm:py-24 lg:py-32">
+        <div className="container-app relative py-12">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="chip mx-auto animate-fade-up border-white/30 bg-white/10 text-white backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" />
-              {t('home.hero.eyebrow')}
-            </span>
+
             <h1 className="mt-6 animate-fade-up text-balance text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl" style={{ animationDelay: '60ms' }}>
               {t('home.hero.title')}
             </h1>
@@ -81,34 +121,38 @@ export function HomePage() {
               {t('home.hero.subtitle')}
             </p>
 
-            <form onSubmit={handleSearch} className="mx-auto mt-8 flex max-w-xl animate-fade-up items-center gap-2 rounded-lg border border-white/20 bg-white/95 p-2 shadow-lift backdrop-blur" style={{ animationDelay: '180ms' }}>
-              <div className="flex flex-1 items-center gap-2 pl-2">
-                <Search className="h-5 w-5 text-ink-muted" />
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t('home.hero.search.placeholder')}
-                  className="w-full bg-transparent py-2 text-sm text-ink-heading placeholder:text-ink-muted focus:outline-none"
-                />
-              </div>
-              <Button type="submit" size="md">{t('cta.explore')}<ArrowRight className="h-4 w-4" /></Button>
-            </form>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-              {chips.map((c) => (
-                <span key={c.label} className="chip border-white/30 bg-white/10 text-white backdrop-blur">
-                  <c.icon className="h-3.5 w-3.5 text-white" />
-                  {c.label}
-                </span>
-              ))}
+            <div className="mt-10 animate-fade-up flex justify-center" style={{ animationDelay: '180ms' }}>
+              <Button to="/apartments" size="lg" className="rounded-full px-10 py-4 text-base shadow-lift font-extrabold transition-transform hover:scale-105 active:scale-95">
+                {t('cta.explore')}
+              </Button>
             </div>
+
+
           </div>
         </div>
+
+        {/* Scroll Indicator */}
+        <button 
+          onClick={() => {
+            const nextSection = document.getElementById('stats');
+            if (nextSection) {
+              const headerOffset = 64;
+              const elementPosition = nextSection.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.scrollY - headerOffset;
+              window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+          }}
+          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer opacity-70 hover:opacity-100 transition-opacity z-10"
+          aria-label="Scroll down"
+        >
+          <Mouse className="h-6 w-6 sm:h-7 sm:w-7 text-white/90" />
+          <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-white/90 -mt-1" />
+        </button>
       </section>
 
       {/* Stats */}
-      <section className="border-y border-line bg-surface">
-        <div className="container-app grid grid-cols-2 gap-6 py-10 lg:grid-cols-4">
+      <section id="stats" className="border-y border-line bg-surface">
+        <div className="container-app grid grid-cols-2 gap-6 py-6 lg:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
               <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">{s.value}</p>
@@ -119,13 +163,13 @@ export function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="container-app py-16 lg:py-20">
+      <section className="container-app py-8 lg:py-12">
         <div className="mx-auto max-w-2xl text-center">
           <span className="chip mx-auto text-primary">{t('home.features.eyebrow')}</span>
           <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.features.title')}</h2>
           <p className="mt-4 text-balance text-base leading-relaxed text-ink-body">{t('home.features.subtitle')}</p>
         </div>
-        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible">
+        <div ref={featuresRef} className="mt-8 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible no-scrollbar">
           {features.map((f) => (
             <Card key={f.title} hover className="p-6 w-[85vw] max-w-[280px] shrink-0 snap-start sm:w-auto sm:max-w-none sm:shrink sm:snap-none">
               <span className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary-soft text-primary">
@@ -139,7 +183,7 @@ export function HomePage() {
       </section>
 
       {/* Featured */}
-      <section className="bg-surface py-16 lg:py-20">
+      <section className="bg-surface py-8 lg:py-12">
         <div className="container-app">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div className="max-w-xl">
@@ -152,15 +196,15 @@ export function HomePage() {
             </Button>
           </div>
 
-          <div className="mt-10">
+          <div className="mt-6">
             {loading ? (
               <div className="flex justify-center py-16"><Spinner className="h-6 w-6 text-primary" /></div>
             ) : apartments.length === 0 ? (
               <Card className="p-12 text-center text-ink-muted">{t('home.featured.empty')}</Card>
             ) : (
-              <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
+              <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
                 {apartments.map((a) => (
-                  <div key={a.id} className="w-[85vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none sm:shrink sm:snap-none">
+                  <div key={a.id}>
                     <ApartmentCard apartment={a} />
                   </div>
                 ))}
@@ -171,12 +215,12 @@ export function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="container-app py-16 lg:py-20">
+      <section className="container-app py-8 lg:py-12">
         <div className="mx-auto max-w-2xl text-center">
           <span className="chip mx-auto text-primary">{t('home.testimonials.eyebrow')}</span>
           <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.testimonials.title')}</h2>
         </div>
-        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:gap-6 md:grid-cols-3 md:overflow-visible">
+        <div ref={testimonialsRef} className="mt-8 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:gap-6 md:grid-cols-3 md:overflow-visible no-scrollbar">
           {testimonials.map((tm) => (
             <Card key={tm.name} className="p-6 w-[85vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink md:snap-none">
               <div className="flex gap-0.5 text-warning">
@@ -200,15 +244,15 @@ export function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="pb-20">
+      <section className="pb-12 lg:pb-16">
         <div className="container-app">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary-hover px-8 py-14 text-center shadow-lift sm:px-16">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary-hover px-6 py-10 text-center shadow-lift sm:px-12">
             <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
             <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
             <div className="relative mx-auto max-w-2xl">
               <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl lg:text-4xl">{t('home.cta.title')}</h2>
               <p className="mt-4 text-base leading-relaxed text-white/85">{t('home.cta.subtitle')}</p>
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Link to="/apartments" className="inline-flex items-center gap-2 rounded-sm bg-white px-6 py-3 text-sm font-bold text-primary transition hover:bg-white/90">
                   {t('cta.browse')}<ArrowRight className="h-4 w-4" />
                 </Link>

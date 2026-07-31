@@ -174,8 +174,8 @@ export function ApartmentDetailPage() {
       </div>
 
       {/* Main Content & Sidebar Grid */}
-      <div className="container-app py-8 lg:py-12">
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+      <div className="container-app py-4 lg:py-6">
+        <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
           {/* Main Content Area */}
           <div className="space-y-8">
             {/* Quick Specs Dashboard */}
@@ -310,15 +310,28 @@ export function ApartmentDetailPage() {
                   {t('detail.contactTitle')}
                 </p>
 
+                {/* Primary Action: Direct Phone Button */}
+                {phoneTarget && (
+                  <a
+                    href={`tel:${phoneTarget}`}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white shadow-soft transition-all duration-200 hover:opacity-90 hover:shadow-lift hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <Phone className="h-4 w-4" />
+                    <span>{t('detail.hotline')}: {phoneTarget}</span>
+                  </a>
+                )}
+
                 {/* Zalo Button */}
                 {zaloTarget && (
                   <a
                     href={zaloTarget}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[#0068FF] to-[#0056D2] px-4 py-3.5 text-sm font-bold text-white shadow-soft transition-all duration-200 hover:shadow-lift hover:scale-[1.02] active:scale-[0.98]"
+                    className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-[#0068FF]/30 bg-[#0068FF]/10 px-4 py-3 text-sm font-bold text-[#0068FF] shadow-soft transition-all duration-200 hover:bg-[#0068FF] hover:text-white hover:shadow-lift hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-tight">Zalo</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M21.402 10.999c0-4.66-4.507-8.437-10.066-8.437-5.56 0-10.067 3.777-10.067 8.437 0 2.378 1.173 4.528 3.064 6.068-.112.355-.38 1.155-.544 1.597-.37.994-.37 1.026.062 1.026.155 0 2.45-.615 3.518-1.296.671 2.057 4.148 2.072 4.148 2.072 5.559 0 10.065-3.778 10.065-8.437zm-3.036 3.14h-1.99v-2.028l2.122-1.89h-1.834V8.583h3.585v1.942l-1.883 1.63h1.883v2.091zm-4.326-4.08h-1.616v4.08h-1.428v-5.632h3.044v1.552zm-3.86 1.84c0 .872-.733 1.583-1.636 1.583-.902 0-1.636-.71-1.636-1.583 0-.874.734-1.583 1.636-1.583.903 0 1.636.709 1.636 1.583zm1.536 2.24h-1.428v-1.107c-.43.435-.978.69-1.556.69-1.393 0-2.525-1.144-2.525-2.553s1.132-2.553 2.525-2.553c.578 0 1.126.255 1.556.69V8.625h1.428V14.14zM8.91 10.155c-.628 0-1.14.517-1.14 1.155 0 .636.512 1.155 1.14 1.155.626 0 1.139-.519 1.139-1.155 0-.638-.513-1.155-1.139-1.155zM12.923 12.3c-.628 0-1.14-.518-1.14-1.156 0-.638.512-1.155 1.14-1.155.626 0 1.14.517 1.14 1.155 0 .638-.514 1.156-1.14 1.156z"/>
+                    </svg>
                     <span>{t('detail.chatZalo')}</span>
                   </a>
                 )}
@@ -329,23 +342,12 @@ export function ApartmentDetailPage() {
                     href={fbTarget}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[#1877F2] to-[#166FE5] px-4 py-3.5 text-sm font-bold text-white shadow-soft transition-all duration-200 hover:shadow-lift hover:scale-[1.02] active:scale-[0.98]"
+                    className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-[#1877F2]/30 bg-[#1877F2]/10 px-4 py-3 text-sm font-bold text-[#1877F2] shadow-soft transition-all duration-200 hover:bg-[#1877F2] hover:text-white hover:shadow-lift hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                     </svg>
                     <span>{t('detail.chatFacebook')}</span>
-                  </a>
-                )}
-
-                {/* Direct Phone Button */}
-                {phoneTarget && (
-                  <a
-                    href={`tel:${phoneTarget}`}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
-                  >
-                    <Phone className="h-4 w-4" />
-                    <span>{t('detail.hotline')}: {phoneTarget}</span>
                   </a>
                 )}
               </div>
