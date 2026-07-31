@@ -552,8 +552,8 @@ const STORAGE_KEY = 'smartbooking-lang';
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window === 'undefined') return 'en';
-    return (localStorage.getItem(STORAGE_KEY) as Lang) || 'en';
+    if (typeof window === 'undefined') return 'vi';
+    return (localStorage.getItem(STORAGE_KEY) as Lang) || 'vi';
   });
 
   useEffect(() => {
