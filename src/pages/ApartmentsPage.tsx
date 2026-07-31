@@ -214,7 +214,7 @@ export function ApartmentsPage() {
     <div className="container-app py-10 lg:py-14">
       <SEO title={t('nav.apartments')} />
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold tracking-tight text-ink-heading sm:text-4xl">{t('list.title')}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('list.title')}</h1>
         <p className="mt-2 text-base text-ink-body">{t('list.subtitle')}</p>
       </div>
 

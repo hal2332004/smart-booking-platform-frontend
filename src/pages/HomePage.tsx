@@ -74,7 +74,7 @@ export function HomePage() {
               <Sparkles className="h-3.5 w-3.5" />
               {t('home.hero.eyebrow')}
             </span>
-            <h1 className="mt-6 animate-fade-up text-balance text-4xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl" style={{ animationDelay: '60ms' }}>
+            <h1 className="mt-6 animate-fade-up text-balance text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl" style={{ animationDelay: '60ms' }}>
               {t('home.hero.title')}
             </h1>
             <p className="mx-auto mt-5 max-w-2xl animate-fade-up text-balance text-base leading-relaxed text-white/90 drop-shadow sm:text-lg" style={{ animationDelay: '120ms' }}>
@@ -111,7 +111,7 @@ export function HomePage() {
         <div className="container-app grid grid-cols-2 gap-6 py-10 lg:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
-              <p className="text-3xl font-extrabold tracking-tight text-primary">{s.value}</p>
+              <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">{s.value}</p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">{s.label}</p>
             </div>
           ))}
@@ -122,12 +122,12 @@ export function HomePage() {
       <section className="container-app py-16 lg:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="chip mx-auto text-primary">{t('home.features.eyebrow')}</span>
-          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-heading sm:text-4xl">{t('home.features.title')}</h2>
+          <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.features.title')}</h2>
           <p className="mt-4 text-base leading-relaxed text-ink-body">{t('home.features.subtitle')}</p>
         </div>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible">
           {features.map((f) => (
-            <Card key={f.title} hover className="p-6">
+            <Card key={f.title} hover className="p-6 min-w-[280px] shrink-0 snap-start sm:min-w-0 sm:shrink sm:snap-none">
               <span className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary-soft text-primary">
                 <f.icon className="h-6 w-6" />
               </span>
@@ -144,7 +144,7 @@ export function HomePage() {
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div className="max-w-xl">
               <span className="chip text-primary">{t('home.featured.eyebrow')}</span>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-heading sm:text-4xl">{t('home.featured.title')}</h2>
+              <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.featured.title')}</h2>
               <p className="mt-3 text-base text-ink-body">{t('home.featured.subtitle')}</p>
             </div>
             <Button to="/apartments" variant="outline">
@@ -158,9 +158,11 @@ export function HomePage() {
             ) : apartments.length === 0 ? (
               <Card className="p-12 text-center text-ink-muted">{t('home.featured.empty')}</Card>
             ) : (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
                 {apartments.map((a) => (
-                  <ApartmentCard key={a.id} apartment={a} />
+                  <div key={a.id} className="min-w-[300px] shrink-0 snap-start sm:min-w-0 sm:shrink sm:snap-none">
+                    <ApartmentCard apartment={a} />
+                  </div>
                 ))}
               </div>
             )}
@@ -172,11 +174,11 @@ export function HomePage() {
       <section className="container-app py-16 lg:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="chip mx-auto text-primary">{t('home.testimonials.eyebrow')}</span>
-          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-heading sm:text-4xl">{t('home.testimonials.title')}</h2>
+          <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.testimonials.title')}</h2>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:gap-6 md:grid-cols-3 md:overflow-visible">
           {testimonials.map((tm) => (
-            <Card key={tm.name} className="p-6">
+            <Card key={tm.name} className="p-6 min-w-[300px] shrink-0 snap-start md:min-w-0 md:shrink md:snap-none">
               <div className="flex gap-0.5 text-warning">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-current" />
@@ -204,7 +206,7 @@ export function HomePage() {
             <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
             <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
             <div className="relative mx-auto max-w-2xl">
-              <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{t('home.cta.title')}</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl lg:text-4xl">{t('home.cta.title')}</h2>
               <p className="mt-4 text-base leading-relaxed text-white/85">{t('home.cta.subtitle')}</p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Link to="/apartments" className="inline-flex items-center gap-2 rounded-sm bg-white px-6 py-3 text-sm font-bold text-primary transition hover:bg-white/90">
