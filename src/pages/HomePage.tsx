@@ -125,9 +125,9 @@ export function HomePage() {
           <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.features.title')}</h2>
           <p className="mt-4 text-base leading-relaxed text-ink-body">{t('home.features.subtitle')}</p>
         </div>
-        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible">
+        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible">
           {features.map((f) => (
-            <Card key={f.title} hover className="p-6 min-w-[280px] shrink-0 snap-start sm:min-w-0 sm:shrink sm:snap-none">
+            <Card key={f.title} hover className="p-6 w-[85vw] max-w-[280px] shrink-0 snap-start sm:w-auto sm:max-w-none sm:shrink sm:snap-none">
               <span className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary-soft text-primary">
                 <f.icon className="h-6 w-6" />
               </span>
@@ -158,9 +158,9 @@ export function HomePage() {
             ) : apartments.length === 0 ? (
               <Card className="p-12 text-center text-ink-muted">{t('home.featured.empty')}</Card>
             ) : (
-              <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
+              <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
                 {apartments.map((a) => (
-                  <div key={a.id} className="min-w-[300px] shrink-0 snap-start sm:min-w-0 sm:shrink sm:snap-none">
+                  <div key={a.id} className="w-[85vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none sm:shrink sm:snap-none">
                     <ApartmentCard apartment={a} />
                   </div>
                 ))}
@@ -176,9 +176,9 @@ export function HomePage() {
           <span className="chip mx-auto text-primary">{t('home.testimonials.eyebrow')}</span>
           <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.testimonials.title')}</h2>
         </div>
-        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:gap-6 md:grid-cols-3 md:overflow-visible">
+        <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:gap-6 md:grid-cols-3 md:overflow-visible">
           {testimonials.map((tm) => (
-            <Card key={tm.name} className="p-6 min-w-[300px] shrink-0 snap-start md:min-w-0 md:shrink md:snap-none">
+            <Card key={tm.name} className="p-6 w-[85vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink md:snap-none">
               <div className="flex gap-0.5 text-warning">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-current" />

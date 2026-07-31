@@ -381,9 +381,9 @@ export function ApartmentDetailPage() {
                 {t('detail.browseAll')} &rarr;
               </Button>
             </div>
-            <div className="mt-6 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
+            <div className="mt-6 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
               {similar.map((a) => (
-                <div key={a.id} className="min-w-[300px] shrink-0 snap-start sm:min-w-0 sm:shrink sm:snap-none">
+                <div key={a.id} className="w-[85vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none sm:shrink sm:snap-none">
                   <ApartmentCard apartment={a} />
                 </div>
               ))}
