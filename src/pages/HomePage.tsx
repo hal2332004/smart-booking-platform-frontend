@@ -81,6 +81,76 @@ export function HomePage() {
   const featuresRef = useAutoScroll(0.8);
   const testimonialsRef = useAutoScroll(0.6);
 
+  // Auto-scroll from Hero to Features on first scroll
+  useEffect(() => {
+    let isScrolling = false;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (isScrolling) return;
+      if (window.scrollY < 300 && e.deltaY > 5) {
+        // User is at top and scrolled down
+        const nextSection = document.getElementById('features');
+        if (nextSection) {
+          isScrolling = true;
+          e.preventDefault(); // Prevent native scroll to let smooth scroll take over
+          const headerOffset = 64;
+          const elementPosition = nextSection.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.scrollY - headerOffset;
+          
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+          
+          // Reset flag after animation completes (roughly 1s)
+          setTimeout(() => {
+            isScrolling = false;
+          }, 1000);
+        }
+      }
+    };
+
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isScrolling) {
+        if (e.cancelable) e.preventDefault();
+        return;
+      }
+      if (window.scrollY < 300) {
+        const touchEndY = e.touches[0].clientY;
+        const deltaY = touchStartY - touchEndY;
+        if (deltaY > 5) { // Swiped up (scrolling down)
+          const nextSection = document.getElementById('features');
+          if (nextSection) {
+            isScrolling = true;
+            if (e.cancelable) e.preventDefault();
+            
+            // Native smooth scroll
+            const headerOffset = 64;
+            const elementPosition = nextSection.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - headerOffset;
+            
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            
+            setTimeout(() => {
+              isScrolling = false;
+            }, 1000);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
+
   useEffect(() => {
     fetchFeaturedApartments()
       .then(setApartments)
@@ -133,7 +203,7 @@ export function HomePage() {
                 {t('cta.explore')}
               </Link>
             </div>
-            <div className="mt-16 animate-fade-up flex justify-center" style={{ animationDelay: '240ms' }}>
+            <div className="mt-24 sm:mt-32 animate-fade-up flex justify-center" style={{ animationDelay: '240ms' }}>
               <button 
                 onClick={() => {
                   const nextSection = document.getElementById('features');
@@ -144,15 +214,15 @@ export function HomePage() {
                     window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                   }
                 }}
-                className="flex flex-col items-center animate-bounce cursor-pointer group"
+                className="flex flex-col items-center gap-3 cursor-pointer group opacity-75 hover:opacity-100 transition-all duration-300"
                 aria-label="Scroll down"
               >
-                <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-lg transition-transform group-hover:scale-110 group-hover:bg-white/20">
-                  <div className="flex flex-col items-center">
-                    <Mouse className="h-5 w-5 sm:h-6 sm:w-6" />
-                    <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 -mt-1" />
-                  </div>
+                <div className="w-[28px] h-[46px] sm:w-[32px] sm:h-[52px] rounded-full border-2 border-white/40 flex justify-center pt-2 group-hover:border-white transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] bg-black/10 backdrop-blur-sm">
+                  <div className="w-1.5 h-2.5 sm:w-1.5 sm:h-3 bg-white rounded-full animate-bounce" />
                 </div>
+                <span className="text-white/70 text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase group-hover:text-white transition-colors drop-shadow-md">
+                  Cuộn xuống
+                </span>
               </button>
             </div>
           </div>
@@ -162,7 +232,7 @@ export function HomePage() {
 
 
       {/* Features */}
-      <section id="features" className="container-app py-8 lg:py-12 overflow-hidden">
+      <section id="features" className="container-app pt-10 pb-16 sm:py-24 overflow-hidden">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <span className="chip mx-auto text-primary">{t('home.features.eyebrow')}</span>
           <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.features.title')}</h2>
