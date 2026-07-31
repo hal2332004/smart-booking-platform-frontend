@@ -15,15 +15,15 @@ export function ApartmentCard({ apartment: rawApartment }: { apartment: Apartmen
   return (
     <Link
       to={`/apartments/${apartment.slug}`}
-      className="card card-hover group block overflow-hidden"
+      className="card card-hover group flex flex-col h-full overflow-hidden"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-line/40">
+      <div className="relative w-full aspect-[4/3] shrink-0 overflow-hidden bg-line/40">
         {cover ? (
           <img
             src={cover}
             alt={apartment.title}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-ink-muted">
@@ -41,7 +41,7 @@ export function ApartmentCard({ apartment: rawApartment }: { apartment: Apartmen
         </div>
       </div>
 
-      <div className="space-y-3 p-4">
+      <div className="flex flex-col flex-1 p-4">
         <div>
           <h3 className="line-clamp-1 text-base font-bold text-ink-heading group-hover:text-primary">
             {apartment.title}
@@ -54,8 +54,7 @@ export function ApartmentCard({ apartment: rawApartment }: { apartment: Apartmen
             </span>
           </p>
         </div>
-
-        <div className="grid grid-cols-3 gap-1 border-t border-line pt-3 text-xs font-medium text-ink-body">
+        <div className="grid grid-cols-3 gap-1 border-t border-line pt-3 text-xs font-medium text-ink-body mt-auto">
           <div className="flex items-center justify-center gap-1.5 min-w-0 text-center" title={`${apartment.bedrooms} ${t('common.beds')}`}>
             <BedDouble className="h-3.5 w-3.5 text-primary shrink-0" />
             <span className="truncate font-semibold">{apartment.bedrooms} {t('common.bedsShort')}</span>

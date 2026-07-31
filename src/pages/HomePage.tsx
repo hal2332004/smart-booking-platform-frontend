@@ -122,8 +122,8 @@ export function HomePage() {
       <section className="container-app py-16 lg:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="chip mx-auto text-primary">{t('home.features.eyebrow')}</span>
-          <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.features.title')}</h2>
-          <p className="mt-4 text-base leading-relaxed text-ink-body">{t('home.features.subtitle')}</p>
+          <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.features.title')}</h2>
+          <p className="mt-4 text-balance text-base leading-relaxed text-ink-body">{t('home.features.subtitle')}</p>
         </div>
         <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible">
           {features.map((f) => (
@@ -144,8 +144,8 @@ export function HomePage() {
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div className="max-w-xl">
               <span className="chip text-primary">{t('home.featured.eyebrow')}</span>
-              <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.featured.title')}</h2>
-              <p className="mt-3 text-base text-ink-body">{t('home.featured.subtitle')}</p>
+              <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.featured.title')}</h2>
+              <p className="mt-3 text-balance text-base text-ink-body">{t('home.featured.subtitle')}</p>
             </div>
             <Button to="/apartments" variant="outline">
               {t('cta.browse')}<ArrowRight className="h-4 w-4" />
@@ -174,7 +174,7 @@ export function HomePage() {
       <section className="container-app py-16 lg:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="chip mx-auto text-primary">{t('home.testimonials.eyebrow')}</span>
-          <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.testimonials.title')}</h2>
+          <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-ink-heading sm:text-3xl lg:text-4xl">{t('home.testimonials.title')}</h2>
         </div>
         <div className="mt-12 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:gap-6 md:grid-cols-3 md:overflow-visible">
           {testimonials.map((tm) => (
