@@ -21,7 +21,7 @@ export function PublicLayout() {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b border-line bg-surface/85 backdrop-blur">
-        <div className="container-app flex h-16 items-center justify-between gap-2 overflow-x-auto no-scrollbar">
+        <div className="container-app flex h-16 items-center justify-between gap-2">
           <Link to="/" className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             <span className="flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-sm bg-primary text-white shadow-soft">
               <Building2 className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -32,7 +32,7 @@ export function PublicLayout() {
           </Link>
 
           <div className="flex items-center gap-1 sm:gap-4 shrink-0">
-            <nav className="flex items-center gap-0.5 sm:gap-1">
+            <nav className="flex items-center gap-0.5 sm:gap-1 overflow-x-auto no-scrollbar">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
